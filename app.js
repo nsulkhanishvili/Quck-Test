@@ -7,27 +7,41 @@
 // მაგ: [ { name: 'John',  age: 45 }, { name: 'Joe',  age: 55 } ]
 
 
-const myDiv = document.querySelector('#main');
-const ul = document.createElement('ul');
-myDiv.appendChild(ul);
+function myFunc(url = 'https://fakerapi.it/api/v1/addresses?_quantity=1') {
+    return new Promise((resolve, reject) => {
+        fetch(url)
+            .then(response => response.json())
+            .then(finalData => {
+                if (finalData.code === 200) {
+                    resolve(finalData);
+                }
+                reject('Status Code ' + finalData.code);
+            })
+    })
+}
 
-const arrPerson = [{
-        name: 'John',
-        age: 45 
-    },
-    {
-        name: 'Joe',
-        age: 15
 
-    },
-];
 
-const newPerson = arrPerson.filter((person) => {
-        return person.name
-}).forEach(person => {
-    const li = document.createElement('li');
-    li.textContent = person.name;
-    ul.appendChild(li);
 
-});
-console.log(newPerson);
+async function addresses() {
+    const result = await myFunc('https://fakerapi.it/api/v1/addresses?_quantity=100');
+    console.log(result);
+    const ul = document.querySelector('ul');
+    result.data.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.city;
+        ul.appendChild(li);
+    })
+}
+
+async function books() {
+    const result = await myFunc('https://fakerapi.it/api/v1/books?_quantity=100');
+    console.log(result);
+    const ul = document.querySelector('ul');
+    result.data.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.title;
+        ul.appendChild(li);
+    })
+}
+
